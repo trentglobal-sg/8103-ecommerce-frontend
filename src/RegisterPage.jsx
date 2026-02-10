@@ -1,6 +1,22 @@
-import { Formik, Field, Form } from 'formik'
+import { Formik, Field, Form, ErrorMessage } from 'formik'
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import * as Yup from 'yup';
+
+const validationSchema = Yup.object({
+    name: Yup.string().required("Name is required"),
+    email: Yup.string().email("The email address is invalid").required("Please enter your email"),
+    password: Yup.string().min(8, "Password must be at least 8 characters")
+        .required("A password is required"),
+    confirmPassword: Yup.string().required("Please re-enter your password")
+        .oneOf(
+            [Yup.ref('password'), null], "Passwords must match"
+        ),
+    salutation: Yup.string().required("Please select a salutation"),
+    country: Yup.string().required('Country is required'),
+    marketingPreferences: Yup.array()
+        .min(1, "Please choose at least one marketing preference")
+})
 
 export default function RegisterPage() {
 
@@ -30,13 +46,14 @@ export default function RegisterPage() {
         }
         fetchMarketingPreferences();
     }, [])
-    
+
     return (<div className="container">
         <h1>Register Page</h1>
         {/* Begin Formik */}
         <Formik
             initialValues={initialValues}
             onSubmit={handleSubmit}
+            validationSchema={validationSchema}
 
         >
             {
@@ -47,21 +64,38 @@ export default function RegisterPage() {
                             <div className="mb-3">
                                 <label htmlFor="name" className="form-label">Name</label>
                                 <Field type="text" className="form-control" id="name" name="name" />
+                                <ErrorMessage
+                                    name="name"
+                                    component="div"
+                                    className="text-danger" />
                             </div>
 
                             <div className="mb-3">
                                 <label htmlFor="name" className="form-label">Email</label>
                                 <Field type="text" className="form-control" id="email" name="email" />
+                                <ErrorMessage
+                                    name="email"
+                                    component="div"
+                                    className="text-danger" />
                             </div>
 
                             <div className="mb-3">
                                 <label htmlFor="name" className="form-label">Password</label>
                                 <Field type="password" className="form-control" id="password" name="password" />
+                                <ErrorMessage
+                                    name="password"
+                                    component="div"
+                                    className="text-danger" />
                             </div>
 
                             <div className="mb-3">
                                 <label htmlFor="name" className="form-label">Password</label>
                                 <Field type="password" className="form-control" id="confirmPassword" name="confirmPassword" />
+                                <ErrorMessage
+                                    name="confirmPassword"
+                                    component="div"
+                                    className="text-danger" />
+
                             </div>
 
                             <div className="mb-3">
@@ -98,6 +132,10 @@ export default function RegisterPage() {
                                         <label className="form-check-label" htmlFor="mrs">Mrs</label>
                                     </div>
                                 </div>
+                                  <ErrorMessage
+                                    name="salutation"
+                                    component="div"
+                                    className="text-danger" />
                             </div>
 
                             <div className="mb-3">
@@ -122,6 +160,10 @@ export default function RegisterPage() {
                                     )
 
                                 }
+                                  <ErrorMessage
+                                    name="marketingPreferences"
+                                    component="div"
+                                    className="text-danger" />
                             </div>
 
                             <div className="mb-3">
@@ -138,6 +180,10 @@ export default function RegisterPage() {
                                     <option value="in">Indonesia</option>
                                     <option value="th">Thailand</option>
                                 </Field>
+                                  <ErrorMessage
+                                    name="country"
+                                    component="div"
+                                    className="text-danger" />
                             </div>
 
                             <input className="btn btn-primary mt-1 mb-3" type="submit" />
