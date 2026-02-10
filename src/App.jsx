@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
+
 import {Switch, Route} from 'wouter';
 
-import ProductCard from './ProductCard';
 import Navbar from './Navbar';
 import MainPage from './MainPage';
 import RegisterPage from './RegisterPage';
 import ProductPage from './ProductPage';
+import FlashMessage from './FlashMessage';
 
+import "./App.css";
 
 export default function App() {
 
   return (<>
+    <FlashMessage/>
     <Navbar/>
 
     <Switch>

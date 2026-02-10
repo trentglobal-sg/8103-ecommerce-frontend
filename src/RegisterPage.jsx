@@ -1,7 +1,10 @@
 import { Formik, Field, Form, ErrorMessage } from 'formik'
 import { useEffect, useState } from 'react';
+import { useLocation } from 'wouter';
 import axios from 'axios';
 import * as Yup from 'yup';
+
+import { useFlashMessage } from './FlashMessageStore';
 
 const validationSchema = Yup.object({
     name: Yup.string().required("Name is required"),
@@ -21,6 +24,8 @@ const validationSchema = Yup.object({
 export default function RegisterPage() {
 
     const [marketingPreferences, setMarketingPreferences] = useState([]);
+    const {showMessage} = useFlashMessage();
+    const [, setLocation] = useLocation();
 
     // set the starting values for all the form elements
     const initialValues = {
@@ -37,6 +42,8 @@ export default function RegisterPage() {
     // function is called when the submit button is pressed
     const handleSubmit = (values, formikHelpers) => {
         console.log("values =", values);
+        showMessage("You have registered successfully!", "success")
+        setLocation('/');
     }
 
     useEffect(() => {

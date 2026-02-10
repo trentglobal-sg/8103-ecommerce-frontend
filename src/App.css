@@ -1,0 +1,8 @@
+.flash-message {
+    position: fixed;
+    top: 5px;
+    left: 5px;
+    width: calc(99vw - 10px);
+    z-index: 100;
+
+}
