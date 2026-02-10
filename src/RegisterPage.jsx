@@ -1,15 +1,21 @@
 import { Formik, Field, Form } from 'formik'
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 export default function RegisterPage() {
+
+    const [marketingPreferences, setMarketingPreferences] = useState([]);
 
     // set the starting values for all the form elements
     const initialValues = {
         name: "",
         email: "",
         password: "",
-        confirmPassword: ""
+        confirmPassword: "",
+        salutation: "",
+        marketingPreferences: [],
+        country: "sg"
+
     }
 
     // function is called when the submit button is pressed
@@ -17,6 +23,14 @@ export default function RegisterPage() {
         console.log("values =", values);
     }
 
+    useEffect(() => {
+        const fetchMarketingPreferences = async () => {
+            const response = await axios.get('/marketingPreferences.json');
+            setMarketingPreferences(response.data);
+        }
+        fetchMarketingPreferences();
+    }, [])
+    
     return (<div className="container">
         <h1>Register Page</h1>
         {/* Begin Formik */}
@@ -88,20 +102,42 @@ export default function RegisterPage() {
 
                             <div className="mb-3">
                                 <label className="form-label">Marketing Preferences</label>
-                                <div className="form-check">
-                                    <Field
-                                        type="checkbox"
-                                        name="marketingPreferences"
-                                        value="sms"
-                                        className="form-check-input"
-                                        id="sms"
-                                    />
-                                    <label
-                                        className="form-check-label"
-                                        htmlFor="sms"
-                                    >SMS</label>
-                                </div>
 
+                                {
+                                    marketingPreferences.map(p => (
+                                        <div key={p.id} className="form-check">
+                                            <Field
+                                                type="checkbox"
+                                                name="marketingPreferences"
+                                                value={String(p.id)}
+                                                className="form-check-input"
+                                                id={"marketingPreferences-" + p.id}
+                                            />
+                                            <label
+                                                className="form-check-label"
+                                                htmlFor={"marketingPreferences-" + p.id}
+                                            >{p.name}</label>
+                                        </div>
+                                    )
+                                    )
+
+                                }
+                            </div>
+
+                            <div className="mb-3">
+                                <label htmlFor="country" className="form-label">Country</label>
+                                <Field
+                                    as="select"
+                                    className="form-select"
+                                    id="country"
+                                    name="country"
+                                >
+                                    <option value="">Select Country</option>
+                                    <option value="sg">Singapore</option>
+                                    <option value="my">Malaysia</option>
+                                    <option value="in">Indonesia</option>
+                                    <option value="th">Thailand</option>
+                                </Field>
                             </div>
 
                             <input className="btn btn-primary mt-1 mb-3" type="submit" />
