@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useLocation } from 'wouter';
+
 import ProductCard from './ProductCard';
+import { useCart } from './CartStore';
+import { useFlashMessage } from './FlashMessageStore';
 
 export default function ProductPage() {
 
     const [products, setProducts] = useState([]);
+    const {addToCart} = useCart();
+    const [, setLocation] = useLocation();
+    const {showMessage} = useFlashMessage();
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -25,6 +32,11 @@ export default function ProductPage() {
                                          name={product.name}
                                          price={product.price}
                                          imageUrl={product.imageUrl}
+                                         onAddToCart={()=>{
+                                            addToCart(product);
+                                            setLocation("/cart");
+                                            showMessage(product.name + " has been added to the cart", "success")
+                                         }}
 
                             />
                         </div>
