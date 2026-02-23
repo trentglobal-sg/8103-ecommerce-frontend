@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useLocation } from 'wouter';
+import { useJwt } from './UserStore';
 
 export default function Navbar() {
 
@@ -8,6 +9,8 @@ export default function Navbar() {
     const toggleNavbar = () => {
         setNavbarShowing(!isNavbarShowing);
     }
+    const { getJwt } = useJwt();
+    const jwt = getJwt();
 
     return (<>
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -31,12 +34,33 @@ export default function Navbar() {
                         <li className="nav-item">
                             <Link className={`nav-link ${location === "/products" ? "active" : ""}`} href="/products">Products</Link>
                         </li>
-                        <li className="nav-item">
-                            <Link className={`nav-link ${location === "/register" ? "active" : ""}`} href="/register">Register</Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className={`nav-link ${location === "/cart" ? "active" : ""}`} href="/cart">Cart</Link>
-                        </li>
+                        {
+                            jwt ? (<>
+                                <li className="nav-item">
+                                    <Link className={`nav-link ${location === "/cart" ? "active" : ""}`} href="/cart">Cart</Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link className={`nav-link ${location === "profile" ? "active" : ""}`} href="/profile">Profile</Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link className={`nav-link ${location === "/logout" ? "active" : ""}`} href="/logout">Logout</Link>
+                                </li>
+                            </>
+                            ) : (
+                                <>
+                                    <li className="nav-item">
+                                        <Link className={`nav-link ${location === "/register" ? "active" : ""}`} href="/register">Register</Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <Link className={`nav-link ${location === "/login" ? "active" : ""}`} href="/login">Login</Link>
+                                    </li>
+                                </>
+                            )
+                        }
+
+
+
+
                     </ul>
                 </div>
             </div>

@@ -7,8 +7,12 @@ import RegisterPage from './RegisterPage';
 import ProductPage from './ProductPage';
 import FlashMessage from './FlashMessage';
 import ShoppingCart from './ShoppingCart';
+import LoginPage from './LoginPage';
+import Profile from './Profile';
+import Logout from './Logout';
 
 import "./App.css";
+
 
 export default function App() {
 
@@ -21,6 +25,9 @@ export default function App() {
       <Route path="/products" component={ProductPage}/>
       <Route path="/register" component={RegisterPage}/>
       <Route path="/cart" component={ShoppingCart} />
+      <Route path="/login" component={LoginPage} />
+      <Route path="/profile" component={Profile} />
+      <Route path="/logout" component={Logout} />
     </Switch>
 
     <footer className="bg-dark text-white text-center py-3">

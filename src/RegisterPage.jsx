@@ -24,7 +24,7 @@ const validationSchema = Yup.object({
 export default function RegisterPage() {
 
     const [marketingPreferences, setMarketingPreferences] = useState([]);
-    const {showMessage} = useFlashMessage();
+    const { showMessage } = useFlashMessage();
     const [, setLocation] = useLocation();
 
     // set the starting values for all the form elements
@@ -40,10 +40,21 @@ export default function RegisterPage() {
     }
 
     // function is called when the submit button is pressed
-    const handleSubmit = (values, formikHelpers) => {
-        console.log("values =", values);
-        showMessage("You have registered successfully!", "success")
-        setLocation('/');
+    const handleSubmit = async (values, formikHelpers) => {
+        try {
+            console.log("values =", values);
+
+            // send the new user's information to the API endpoint
+            const response = await axios.post(import.meta.env.VITE_API_URL + 'api/users/register', values);
+            console.log(response.data);
+
+            showMessage("You have registered successfully!", "success")
+            setLocation('/');
+        } catch (error) {
+            showMessage("Unable to register", "error");
+            console.error(error);
+        } 
+
     }
 
     useEffect(() => {
@@ -139,7 +150,7 @@ export default function RegisterPage() {
                                         <label className="form-check-label" htmlFor="mrs">Mrs</label>
                                     </div>
                                 </div>
-                                  <ErrorMessage
+                                <ErrorMessage
                                     name="salutation"
                                     component="div"
                                     className="text-danger" />
@@ -167,7 +178,7 @@ export default function RegisterPage() {
                                     )
 
                                 }
-                                  <ErrorMessage
+                                <ErrorMessage
                                     name="marketingPreferences"
                                     component="div"
                                     className="text-danger" />
@@ -187,7 +198,7 @@ export default function RegisterPage() {
                                     <option value="in">Indonesia</option>
                                     <option value="th">Thailand</option>
                                 </Field>
-                                  <ErrorMessage
+                                <ErrorMessage
                                     name="country"
                                     component="div"
                                     className="text-danger" />
